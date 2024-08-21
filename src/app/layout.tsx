@@ -28,10 +28,10 @@ export default function RootLayout({
         <body className={inter.className}>
           <ModalProvider />
           <ToasterProvider />
-          <SignedOut>
+          {/* <SignedOut>
             <SignInButton />
           </SignedOut>
-          <SignedIn></SignedIn>
+          <SignedIn></SignedIn> */}
           {children}
         </body>
       </html>

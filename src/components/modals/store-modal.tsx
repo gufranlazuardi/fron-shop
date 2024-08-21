@@ -41,13 +41,13 @@ export const StoreModal = () => {
       setIsLoading(true);
 
       const response = await axios.post("/api/stores", values);
-      // window.location.assign(`/${response.data.id}`);
       console.log(response.data);
       toast({
         title: "Sukses",
         description: "Sukses menambahkan toko",
         variant: "default",
       });
+      window.location.assign(`/${response.data.id}`);
     } catch (error: any) {
       console.log(error);
       toast({

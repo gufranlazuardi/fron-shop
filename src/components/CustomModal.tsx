@@ -31,7 +31,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   };
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
-      <DialogTrigger>open</DialogTrigger>
+      {/* <DialogTrigger>open</DialogTrigger> */}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
