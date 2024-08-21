@@ -15,18 +15,18 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useState } from "react";
+import axios from "axios";
+import { useToast } from "../ui/use-toast";
 
 const fromSchema = z.object({
   name: z.string().min(1),
 });
 
-const onSubmit = async (values: z.infer<typeof fromSchema>) => {
-  // todo: buat toko
-  console.log(values);
-};
-
 export const StoreModal = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const storeModal = useStoreModal();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof fromSchema>>({
     resolver: zodResolver(fromSchema),
@@ -34,6 +34,31 @@ export const StoreModal = () => {
       name: "",
     },
   });
+
+  const onSubmit = async (values: z.infer<typeof fromSchema>) => {
+    // input nama toko
+    try {
+      setIsLoading(true);
+
+      const response = await axios.post("/api/stores", values);
+      // window.location.assign(`/${response.data.id}`);
+      console.log(response.data);
+      toast({
+        title: "Sukses",
+        description: "Sukses menambahkan toko",
+        variant: "default",
+      });
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        title: "Failed",
+        description: "Gagal menambahkan toko",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <CustomModal
@@ -53,7 +78,11 @@ export const StoreModal = () => {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="nama toko" {...field} />
+                      <Input
+                        placeholder="nama toko"
+                        {...field}
+                        disabled={isLoading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -66,7 +95,11 @@ export const StoreModal = () => {
                 >
                   Cancel
                 </Button>
-                <Button className="bg-green-500" type="submit">
+                <Button
+                  className="bg-green-500"
+                  type="submit"
+                  disabled={isLoading}
+                >
                   Continue
                 </Button>
               </div>
