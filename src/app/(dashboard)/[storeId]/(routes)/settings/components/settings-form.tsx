@@ -69,12 +69,35 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setIsLoading(true);
+      await axios.delete(`/api/stores/${params.storeId}`);
+      router.refresh();
+      router.push("/");
+      toast({
+        title: "Mantap",
+        description: "Toko udah kehapus bro",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Serius nih mau dihapus?",
+        description: "Ilang nanti datanya",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={() => {}}
+        onConfirm={onDelete}
         loading={isLoading}
       />
 
