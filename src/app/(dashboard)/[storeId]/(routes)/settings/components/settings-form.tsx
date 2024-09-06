@@ -22,6 +22,7 @@ import { toast, useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import AlertModal from "@/components/modals/alert-modal";
+import { ApiAlert } from "@/components/ApiAlert";
 
 interface SettingsFormProps {
   initialData: Store;
@@ -142,6 +143,12 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
           </Button>
         </form>
       </Form>
+      <Separator />
+      <ApiAlert
+        title={"PUBLIC_API_URL"}
+        description={`${origin}/api/${params.storeId}`}
+        variant={"public"}
+      />
     </>
   );
 };
