@@ -22,6 +22,11 @@ function MainNav({
       label: "Settings",
       active: pathname === `/${params.storeId}/settings`,
     },
+    {
+      href: `/${params.storeId}/banners`,
+      label: "Banners",
+      active: pathname === `/${params.storeId}/banners`,
+    },
   ];
   return (
     <nav
