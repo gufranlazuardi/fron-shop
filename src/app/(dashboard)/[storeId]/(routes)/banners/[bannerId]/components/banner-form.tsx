@@ -23,6 +23,7 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import AlertModal from "@/components/modals/alert-modal";
 import { ApiAlert } from "@/components/ApiAlert";
+import ImageUpload from "@/components/ImageUpload";
 
 interface BannerFormProps {
   initialData: Banner | null;
@@ -62,11 +63,15 @@ const BannerForm: React.FC<BannerFormProps> = ({ initialData }) => {
   const onSubmit = async (data: BannerFormValues) => {
     try {
       setIsLoading(true);
-      await axios.patch(`/api/stores/${params.storeId}`, data);
+      if (initialData) {
+        await axios.patch(`/api/${params.storeId}/banners/${params.bannerId}`, data);
+      } else {
+        await axios.post(`/api/${params.storeId}/banners`, data);
+      }
       router.refresh();
       toast({
         title: "Berhasil!",
-        description: "Toko berhasil di Update",
+        description: (toastMessage) ,
         variant: "default",
         className: "bg-green-500 text-slate-100 py-[2rem]",
       });
@@ -84,12 +89,12 @@ const BannerForm: React.FC<BannerFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/api/stores/${params.storeId}`);
+      await axios.delete(`/api/stores/${params.storeId}/banners/${params.bannerId}`);
       router.refresh();
       router.push("/");
       toast({
-        title: "Mantap",
-        description: "Toko udah kehapus bro",
+        title: "Berhasil",
+        description: "Banner udah kehapus bro",
         variant: "default",
       });
     } catch (error) {
@@ -142,6 +147,25 @@ const BannerForm: React.FC<BannerFormProps> = ({ initialData }) => {
                       placeholder="nama toko"
                       disabled={isLoading}
                       {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <ImageUpload 
+                      disabled={isLoading}
+                      onChange={(url) => field.onChange(url)}
+                      onRemove={() => field.value}
+                      value={field.value ? [field.value] : []}
                     />
                   </FormControl>
                   <FormMessage />
